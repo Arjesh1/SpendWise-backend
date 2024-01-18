@@ -20,7 +20,11 @@ app.use(express.json())
 
 //routers
 import transactionRouter from './src/router/transactionRouter.js'
-app.use('/api/vi/transaction', transactionRouter)
+import authRouter from './src/router/authRouter.js'
+
+app.use('/api/v1/transaction', transactionRouter)
+app.use('/api/v1/auth', authRouter)
+
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`)

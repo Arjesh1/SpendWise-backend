@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const TransactionScheema = new mongoose.Schema({
+const TransactionSchema = new mongoose.Schema({
     amount: String,
     date:String,
     name: String,
@@ -14,4 +14,4 @@ const TransactionScheema = new mongoose.Schema({
     },
 })
 
-export default mongoose.model('Transaction', TransactionScheema)
+export default mongoose.model('Transaction', TransactionSchema)
