@@ -11,15 +11,20 @@ export const registerUser = async(req, res)=>{
          return res.status(401).json({message: "Email already registered!"})
     }
     const hashedPassword =  hashPassword(password)
-    const user = await User.create({name, email, goal, profileImg, hashedPassword})
-    res.status(201).json({user})
+    const newUser = await User.create({name, email, goal, profileImg, hashedPassword})
+    const token = createJWT({_id: newUser.id})
+    res.status(201).json({
+        _id:token, 
+        name: newUser.name,
+        email: newUser.email,
+        goal: newUser.goal,
+        profileImg: newUser.profileImg, })
 }
 
 export const loginUser = async(req, res)=>{
     try {
         const {email, password} = req.body
         const user = await User.findOne({email:email})
-        console.log(user)
         if(!user){
         res.status(401).json({ message: "Authentication failed. No user found" });
     }
