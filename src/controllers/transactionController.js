@@ -4,7 +4,8 @@ import User from '../models/authModel.js'
 import { verifyJWT } from "../utils/tokenUtils.js"
 
 export const createTransaction = async (req, res)=>{
-    const {name, amount, category, date, type, token} = req.body
+    const {name, amount, category, date, type} = req.body
+    const token = req.params.token
     const userId = await verifyJWT(token) 
     if(!userId && !userId._id){
         return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
@@ -18,6 +19,11 @@ export const createTransaction = async (req, res)=>{
 }
 
 export const getUserTransaction = async (req, res) =>{
-    const transactions = await Transaction.find({})
+    const token= req.params.token
+    const userId = await verifyJWT(token)
+    if(!userId && !userId._id){
+        return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
+    }
+    const transactions = await Transaction.find({uid:userId._id})
     res.status(StatusCodes.OK).json(transactions)
 }

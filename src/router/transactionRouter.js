@@ -3,6 +3,6 @@ import { createTransaction, getUserTransaction } from "../controllers/transactio
 import { validateTransactionValues } from "../middleware/validationMiddleware.js";
 const router = Router()
 
-router.route('/').get(getUserTransaction).post(validateTransactionValues, createTransaction)
+router.route('/:token').get(getUserTransaction).post(validateTransactionValues, createTransaction)
 
 export default router
