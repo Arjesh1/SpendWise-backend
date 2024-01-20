@@ -76,7 +76,7 @@ export const updatingPassword = async (req, res) =>{
                 return res.status(401).json({ message: "Authentication failed. Wrong Password" });
             }
             const hashedNewPassword = hashPassword(newPassword)
-            const updatePassword = await User.findOneAndUpdate(
+            await User.findOneAndUpdate(
                   {_id: user._id},
                   {$set: { hashedPassword: hashedNewPassword } },
                   { new: true }

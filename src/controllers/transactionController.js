@@ -19,11 +19,46 @@ export const createTransaction = async (req, res)=>{
 }
 
 export const getUserTransaction = async (req, res) =>{
-    const token= req.params.token
+    const token = req.params.token
     const userId = await verifyJWT(token)
     if(!userId && !userId._id){
         return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
     }
+    const user = await User.findById(userId._id)
+    if(!user){
+        return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
+    }
+
     const transactions = await Transaction.find({uid:userId._id})
     res.status(StatusCodes.OK).json(transactions)
+}
+
+export const updateTransaction = async (req, res)=>{
+
+    try {
+       const {_id, ...rest} = req.body
+       const token = req.params.token
+       const userId = await verifyJWT(token)
+       if(!userId && !userId._id){
+        return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
+       }
+       const user = await User.findById(userId._id)
+       if(!user){
+        return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
+       }
+       const transaction = await Transaction.findById(_id);
+       if(!transaction){
+          return res.status(StatusCodes.NOT_FOUND).json({message: "Transaction cannot be updated!"})
+       }  
+       const updatedTransaction = await Transaction.findOneAndUpdate(
+          {_id:_id},
+          rest,
+          { new: true })
+          res.status(StatusCodes.OK).json({message: 'Successfully updated', updatedTransaction}
+        )
+    } catch (error) {
+        console.log("UpdateTransaction Error:", error)
+        return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
+    }
+    
 }
