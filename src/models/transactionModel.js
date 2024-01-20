@@ -4,6 +4,7 @@ const TransactionSchema = new mongoose.Schema({
     amount: String,
     date:String,
     name: String,
+    uid: String,
     type: {
         type:String,
         enum: ['income', 'expenses']

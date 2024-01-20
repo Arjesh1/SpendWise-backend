@@ -20,6 +20,7 @@ export const validateTransactionValues = withValidationError([
     body('name').notEmpty().withMessage('Name is required!'),
     body('amount').notEmpty().withMessage('Amount is required!'),
     body('date').notEmpty().withMessage('Date is required!'),
+    body('token').notEmpty(),
     body('type').notEmpty().isIn(Object.values(TRANSACTION_TYPE)).withMessage('Invalid transaction type!'),
     body('category').optional().isIn(Object.values(TRANSACTION_CATEGORY)).withMessage('Invalid transaction category!')
 ])
