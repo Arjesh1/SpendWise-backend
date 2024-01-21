@@ -5,6 +5,10 @@ const TransactionSchema = new mongoose.Schema({
     date:String,
     name: String,
     uid: String,
+    archived:{
+        type: Boolean,
+        default: false
+    },
     type: {
         type:String,
         enum: ['income', 'expenses']
