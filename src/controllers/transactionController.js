@@ -29,7 +29,7 @@ export const getUserTransaction = async (req, res) =>{
     if(!user){
         return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
     }
-    const transactions = await Transaction.find({uid:userId._id}).lean() 
+    const transactions = await Transaction.find({uid:userId._id, archived: false}).lean() 
 
     const sanitizedTransactions = transactions.map(({ uid, archived, ...rest }) => rest);
 

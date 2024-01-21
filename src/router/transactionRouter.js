@@ -4,6 +4,6 @@ import { validateTransactionValues } from "../middleware/validationMiddleware.js
 const router = Router()
 
 router.route('/:token').get(getUserTransaction).post(validateTransactionValues, createTransaction).put(updateTransaction)
-router.route('/:token/delete').put(archiveTransaction)
+router.route('/delete/:token').put(archiveTransaction)
 
 export default router
