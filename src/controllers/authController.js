@@ -5,20 +5,26 @@ import { createJWT, verifyJWT } from "../utils/tokenUtils.js"
 
 
 export const registerUser = async(req, res)=>{
-    const {name, email, goal, profileImg, password} = req.body
+    try {
+        const {name, email, goal, profileImg, password} = req.body
     const emailExist = await User.findOne({email:email})
     if(emailExist){
          return res.status(StatusCodes.UNAUTHORIZED).json({message: "Email already registered!"})
     }
     const hashedPassword =  hashPassword(password)
     const newUser = await User.create({name, email, goal, profileImg, hashedPassword})
-    const token = createJWT({_id: newUser.id})
-    res.status(StatusCodes.OK).json({
-        _id:token, 
+    const resUserData = { 
         name: newUser.name,
         email: newUser.email,
         goal: newUser.goal,
-        profileImg: newUser.profileImg, })
+        profileImg: newUser.profileImg}
+    const token = createJWT({_id: newUser.id})
+    res.status(StatusCodes.OK).json({resUserData, token })
+        
+    } catch (error) {
+        console.log(error)
+        res.status(StatusCodes.GATEWAY_TIMEOUT).json({message: "Email already registered!"})
+    }
 }
 
 export const loginUser = async(req, res)=>{

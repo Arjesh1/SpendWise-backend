@@ -4,6 +4,9 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 import morgan from 'morgan'
+import cors from 'cors'
+
+app.use(cors());
 
 
 if(process.env.NODE_ENV === 'development'){
