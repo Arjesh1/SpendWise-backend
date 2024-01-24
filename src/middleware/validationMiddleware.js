@@ -25,13 +25,18 @@ export const validateTransactionValues = withValidationError([
     body('category').optional().isIn(Object.values(TRANSACTION_CATEGORY)).withMessage('Invalid transaction category!')
 ])
 
-export const validateAuthValues = withValidationError([
+export const validateRegisterAuthValues = withValidationError([
     body('name').notEmpty().withMessage('Name is required!'),
     body('email').notEmpty().isEmail().withMessage('Email is invalid!'),
     body('password').notEmpty().withMessage('Password is required!'),
     body('goal').optional(),
     body('profileImg').optional(),
 
+])
+
+export const validateLoginAuthValues = withValidationError([
+    body('email').notEmpty().isEmail().withMessage('Email is invalid!'),
+    body('password').notEmpty().withMessage('Password is required!'),
 ])
 
 

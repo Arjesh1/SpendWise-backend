@@ -3,27 +3,26 @@ import User from "../models/authModel.js"
 import { comparePassword, hashPassword } from "../utils/bcrypt.js"
 import { createJWT, verifyJWT } from "../utils/tokenUtils.js"
 
-
 export const registerUser = async(req, res)=>{
     try {
         const {name, email, goal, profileImg, password} = req.body
-    const emailExist = await User.findOne({email:email})
-    if(emailExist){
+        const emailExist = await User.findOne({email:email})
+        if(emailExist){
          return res.status(StatusCodes.UNAUTHORIZED).json({message: "Email already registered!"})
-    }
-    const hashedPassword =  hashPassword(password)
-    const newUser = await User.create({name, email, goal, profileImg, hashedPassword})
-    const resUserData = { 
-        name: newUser.name,
-        email: newUser.email,
-        goal: newUser.goal,
-        profileImg: newUser.profileImg}
-    const token = createJWT({_id: newUser.id})
-    res.status(StatusCodes.OK).json({resUserData, token })
-        
+        }
+        const hashedPassword =  hashPassword(password)
+        const newUser = await User.create({name, email, goal, profileImg, hashedPassword})
+        const userData = { 
+           name: newUser.name,
+           email: newUser.email,
+           goal: newUser.goal,
+           profileImg: newUser.profileImg
+        }
+        const token = createJWT({_id: newUser.id})
+        return res.status(StatusCodes.OK).json({userData, token })
     } catch (error) {
         console.log(error)
-        res.status(StatusCodes.GATEWAY_TIMEOUT).json({message: "Email already registered!"})
+        res.status(StatusCodes.GATEWAY_TIMEOUT).json({message: "Something went wrong. Please try again!"})
     }
 }
 
@@ -32,17 +31,23 @@ export const loginUser = async(req, res)=>{
         const {email, password} = req.body
         const user = await User.findOne({email:email})
         if(!user){
-        return res.status(401).json({ message: "Authentication failed. No user found" });
+        return res.status(StatusCodes.NOT_FOUND).json({ message: "No user found" });
     }
     if(!comparePassword(password,user.hashedPassword)){
         return res.status(401).json({ message: "Authentication failed. Wrong Password" });
     }
       const token = createJWT({_id: user.id})
-  
-    return res.json({ id:token, email:user.email, name:user.name, goal:user.goal, profileImg: user.profileImg});
+      const userData = { 
+        email:user.email, 
+        name:user.name, 
+        goal:user.goal, 
+        profileImg: user.profileImg
+    }
+    return res.status(StatusCodes.OK).json({ userData, token});
         
     } catch (error) {
-        return res.status(500).json({ error: "Internal Server Error" });
+        console.log(error)
+        return res.status(500).json({ message: "Something went wrong. Please try again!" });
     }
 }
 
