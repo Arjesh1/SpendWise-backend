@@ -53,20 +53,28 @@ export const loginUser = async(req, res)=>{
 
 export const updateUserDetails = async (req, res)=>{
     try {
-      const token = req.params.token
+      const token = req.body.token
       const decodedJWT = await verifyJWT(token)
       if(decodedJWT && decodedJWT._id){
         const user = await User.findById(decodedJWT._id)
         if(user){
             const updateDetails = await User.findOneAndUpdate(
                 {_id: user._id},
-                req.body,
+                req.body.userData,
                 { new: true }
             )
-            return res.status(200).json({updateDetails})
+
+            const token = createJWT({_id: updateDetails.id})
+            const updatedUserData = { 
+              email:updateDetails.email, 
+              name:updateDetails.name, 
+              goal:updateDetails.goal, 
+              profileImg: updateDetails.profileImg
+          }
+            return res.status(200).json({ updatedUserData, token})
         }
       }
-      res.status(401).json({message: 'SomeThing went worng.'})
+      return res.status(401).json({message: 'SomeThing went worng.'})
         
     } catch (error) {
         console.error('Error updating user details:', error);

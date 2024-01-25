@@ -1,6 +1,7 @@
 import { body, param, validationResult } from "express-validator";
 import { BadRequestError, NotFoundError } from "../errors/customErrors.js";
 import { TRANSACTION_CATEGORY, TRANSACTION_TYPE } from "../utils/constants.js";
+import { StatusCodes } from "http-status-codes";
 
 const withValidationError = (validateValues)=>{
     return [
@@ -9,7 +10,7 @@ const withValidationError = (validateValues)=>{
             const errors =  validationResult(req)
             if(!errors.isEmpty()){
                 const errorMessage = errors.array().map((error) => error.msg);
-                throw new BadRequestError(errorMessage)
+                res.status(StatusCodes.BAD_REQUEST).json({message: errorMessage})
             }
             next()
         }
@@ -20,7 +21,7 @@ export const validateTransactionValues = withValidationError([
     body('name').notEmpty().withMessage('Name is required!'),
     body('amount').notEmpty().withMessage('Amount is required!'),
     body('date').notEmpty().withMessage('Date is required!'),
-    body('token').notEmpty(),
+    body('token').notEmpty().withMessage('Something went wrong. Please try again later!'),
     body('type').notEmpty().isIn(Object.values(TRANSACTION_TYPE)).withMessage('Invalid transaction type!'),
     body('category').optional().isIn(Object.values(TRANSACTION_CATEGORY)).withMessage('Invalid transaction category!')
 ])
