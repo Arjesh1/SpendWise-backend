@@ -57,6 +57,14 @@ export const updateUserDetails = async (req, res)=>{
       const decodedJWT = await verifyJWT(token)
       if(decodedJWT && decodedJWT._id){
         const user = await User.findById(decodedJWT._id)
+        const allUsers = await User.find()
+        const otherUsers = allUsers.filter((user)=> user._id !== decodedJWT)
+        const checkSameEmail = otherUsers.filter((user) => user.email === req.body.userData.email)
+
+        if(checkSameEmail){
+            return res.status(StatusCodes.UNAUTHORIZED).json({message: "Email already registered!"})
+        }
+
         if(user){
             const updateDetails = await User.findOneAndUpdate(
                 {_id: user._id},
@@ -65,6 +73,7 @@ export const updateUserDetails = async (req, res)=>{
             )
 
             const token = createJWT({_id: updateDetails.id})
+
             const updatedUserData = { 
               email:updateDetails.email, 
               name:updateDetails.name, 
@@ -78,7 +87,7 @@ export const updateUserDetails = async (req, res)=>{
         
     } catch (error) {
         console.error('Error updating user details:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
 
