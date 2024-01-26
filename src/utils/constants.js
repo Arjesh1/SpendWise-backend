@@ -11,3 +11,8 @@ export const TRANSACTION_CATEGORY ={
     HOUSE:'House',
     OTHER: 'Other'
 }
+
+export const RESPONSE_MESSAGES = {
+    ErrorMessage: 'Something went wrong! Please try again later',
+    
+}
