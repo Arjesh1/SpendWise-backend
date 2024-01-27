@@ -25,6 +25,9 @@ export const createTransaction = async (req, res)=>{
 export const getUserTransaction = async (req, res) =>{
     try {
     const token = req.headers.authorization;
+    if(!token) {
+        return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
+    }
     const userId = await verifyJWT(token)
     if(!userId || !userId._id){
         return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
@@ -75,7 +78,7 @@ export const updateTransaction = async (req, res)=>{
 export const archiveTransaction = async (req, res) =>{
     try{
       const {_id} = req.body
-         const token = req.params.token
+         const token = req.headers.authorization;
          const userId = await verifyJWT(token)
          if(!userId && !userId._id){
           return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
@@ -92,7 +95,7 @@ export const archiveTransaction = async (req, res) =>{
             {_id:_id},
             {$set: { archived: true }},
             { new: true })
-            res.status(StatusCodes.OK).json({message: 'Successfully deleted'}
+            res.status(StatusCodes.OK).json({success: 'Successfully deleted'}
           )
     } catch {
           console.log("UpdateTransaction Error:", error)

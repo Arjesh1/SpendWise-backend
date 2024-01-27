@@ -24,6 +24,10 @@ export const validateTransactionValues = withValidationError([
     body('category').optional().isIn(Object.values(TRANSACTION_CATEGORY)).withMessage('Invalid transaction category!')
 ])
 
+export const validateTransactionId = withValidationError([
+    body('_id').notEmpty().withMessage('Id is required!'),
+])
+
 export const validateRegisterAuthValues = withValidationError([
     body('name').notEmpty().withMessage('Name is required!'),
     body('email').notEmpty().isEmail().withMessage('Email is invalid!'),
