@@ -44,10 +44,9 @@ export const getUserTransaction = async (req, res) =>{
 }
 
 export const updateTransaction = async (req, res)=>{
-
     try {
        const {_id, ...rest} = req.body
-       const token = req.params.token
+       const token = req.headers.authorization;
        const userId = await verifyJWT(token)
        if(!userId && !userId._id){
         return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
@@ -60,11 +59,11 @@ export const updateTransaction = async (req, res)=>{
        if(!transaction){
           return res.status(StatusCodes.NOT_FOUND).json({message: "Transaction cannot be updated!"})
        }  
-       const updatedTransaction = await Transaction.findOneAndUpdate(
+       await Transaction.findOneAndUpdate(
           {_id:_id},
           rest,
           { new: true })
-          res.status(StatusCodes.OK).json({message: 'Successfully updated', updatedTransaction}
+          return res.status(StatusCodes.OK).json({success: 'Successfully updated'}
         )
     } catch (error) {
         console.log("UpdateTransaction Error:", error)

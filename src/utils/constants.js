@@ -14,5 +14,6 @@ export const TRANSACTION_CATEGORY ={
 
 export const RESPONSE_MESSAGES = {
     ErrorMessage: 'Something went wrong! Please try again later',
+    InputEmptyMessage: 'All fields are required!'
     
 }
