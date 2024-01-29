@@ -24,9 +24,11 @@ app.use(express.json())
 //routers
 import transactionRouter from './src/router/transactionRouter.js'
 import authRouter from './src/router/authRouter.js'
+import uploadRouter from './src/router/uploadRouter.js'
 
 app.use('/api/v1/transaction', transactionRouter)
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/upload', uploadRouter)
 
 
 app.listen(PORT, () => {

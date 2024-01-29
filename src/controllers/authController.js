@@ -129,3 +129,7 @@ export const changePassword = async (req, res) =>{
       
 
 }
+
+export const uploadProfileImg = async(req, res)=>{
+    
+}
