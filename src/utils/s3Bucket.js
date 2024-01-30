@@ -1,34 +1,31 @@
 import S3 from 'aws-sdk/clients/s3.js';
 import "dotenv/config";
-import fs from "fs";
+import { StatusCodes } from 'http-status-codes';
 
-const uploadFile = (file) => {
-  const bucketName = process.env.AWS_BUCKET_NAME;
-  const region = process.env.AWS_REGION;
-  const accessKey = process.env.AWS_ACCESS_KEY;
-  const secretKey = process.env.AWS_SECRET_KEY;
+const bucketName = process.env.AWS_BUCKET_NAME;
+const accessKey = process.env.AWS_ACCESS_KEY;
+const secretKey = process.env.AWS_SECRET_KEY;
 
-  const s3 = new S3({
-    region,
-    accessKeyId: accessKey,
-    secretAccessKey: secretKey,
-    endpoint: process.env.AWS_ENDPOINT,
-    apiVersion: process.env.AWS_API_VERSION,
-  });
+const s3 = new S3({
+  accessKeyId: accessKey,
+  secretAccessKey: secretKey,
+});
 
-  try {
-    const fileStream = fs.createReadStream(file.path);
-
-    const uploadParams = {
+const uploadFile = (key) => {
+  return new Promise((resolve, reject) => {
+    s3.getSignedUrl('uploadImage', {
       Bucket: bucketName,
-      Body: fileStream,
-      Key: file.filename,
-    };
-
-    return s3.upload(uploadParams).promise();
-  } catch (error) {
-    console.log(error);
-  }
+      ContentType: 'image/jpeg',
+      Key: key
+    }, (err, url) => {
+      if (err) {
+        console.error('Error generating pre-signed URL:', err);
+        reject(err);
+      } else {
+        resolve(url);
+      }
+    });
+  });
 };
 
 export default uploadFile;
