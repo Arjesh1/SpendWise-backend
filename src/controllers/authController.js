@@ -62,7 +62,7 @@ export const updateUserDetails = async (req, res)=>{
         const user = await User.findById(decodedJWT._id)
         const allUsers = await User.find()
         const otherUsers = allUsers.filter((currentUser) => currentUser._id.toString() !== user._id.toString());
-        const checkDuplicateEmail = otherUsers.find((otherUser) => otherUser.email === req.body.userData.email)
+        const checkDuplicateEmail = otherUsers.find((otherUser) => otherUser.email === req.body.email)
 
         if(checkDuplicateEmail){
             return res.status(StatusCodes.UNAUTHORIZED).json({message: "Email already registered!"})
@@ -73,7 +73,7 @@ export const updateUserDetails = async (req, res)=>{
         }
         const updateDetails = await User.findOneAndUpdate(
                 {_id: user._id},
-                req.body.userData,
+                req.body,
                 { new: true }
         )
 
@@ -93,10 +93,10 @@ export const updateUserDetails = async (req, res)=>{
 }
 
 export const changePassword = async (req, res) =>{
-    const token = req.body.token
-    const confirmNewPassword =  req.body.passwordChangeData.confirmNewPassword
-    const password =  req.body.passwordChangeData.oldPassword
-    const newPassword =  req.body.passwordChangeData.newPassword
+    const token = await req.headers.authorization;
+    const confirmNewPassword =  await req.body.confirmNewPassword
+    const password =  req.body.oldPassword
+    const newPassword =  req.body.newPassword
 
     try {
         if(newPassword !== confirmNewPassword ){
