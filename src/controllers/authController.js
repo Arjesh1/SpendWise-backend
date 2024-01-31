@@ -54,7 +54,7 @@ export const loginUser = async(req, res)=>{
 
 export const updateUserDetails = async (req, res)=>{
     try {
-      const receivedToken = req.body.token
+      const receivedToken = await req.headers.authorization;
       const decodedJWT = await verifyJWT(receivedToken)
       if(!decodedJWT || !decodedJWT._id){
         return res.status(StatusCodes.UNAUTHORIZED).json({message: RESPONSE_MESSAGES.ErrorMessage}) 
