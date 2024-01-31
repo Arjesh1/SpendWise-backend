@@ -70,7 +70,6 @@ export const updateUserDetails = async (req, res)=>{
 
         if(!user){
             return res.status(401).json({message: RESPONSE_MESSAGES.ErrorMessage})
-
         }
         const updateDetails = await User.findOneAndUpdate(
                 {_id: user._id},
