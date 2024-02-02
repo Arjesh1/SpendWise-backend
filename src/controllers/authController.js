@@ -6,7 +6,10 @@ import { RESPONSE_MESSAGES } from "../utils/constants.js"
 
 export const registerUser = async(req, res)=>{
     try {
-        const {name, email, goal, profileImg, password} = req.body
+        const {name, email, goal, profileImg, password,confirmPassword } = req.body
+        if(password !== confirmPassword){
+            return res.status(StatusCodes.UNAUTHORIZED).json({message: "Password and confirm password do not match!"})
+        }
         const emailExist = await User.findOne({email:email})
         if(emailExist){
          return res.status(StatusCodes.UNAUTHORIZED).json({message: "Email already registered!"})

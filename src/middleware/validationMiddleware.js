@@ -32,6 +32,7 @@ export const validateRegisterAuthValues = withValidationError([
     body('name').notEmpty().withMessage('Name is required!'),
     body('email').notEmpty().isEmail().withMessage('Email is invalid!'),
     body('password').notEmpty().withMessage('Password is required!'),
+    body('confirmPassword').notEmpty().withMessage('Confirm password is required!'),
     body('goal').optional(),
     body('profileImg').optional(),
 
