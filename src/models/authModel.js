@@ -10,7 +10,6 @@ const UserSchema = new mongoose.Schema({
     },
     profileImg: {
         type: String,
-        default: 'https://www.pngarts.com/files/5/User-Avatar-PNG-Background-Image.png'
     },
 })
 
