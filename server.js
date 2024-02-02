@@ -21,10 +21,19 @@ const PORT = process.env.PORT || 5100
 
 app.use(express.json())
 
+import ExpressMongoSanitize from 'express-mongo-sanitize'
+app.use(
+    ExpressMongoSanitize({
+      allowDots: true,
+      replaceWith: '_',
+    }),
+  );
+
 //routers
 import transactionRouter from './src/router/transactionRouter.js'
 import authRouter from './src/router/authRouter.js'
 import uploadRouter from './src/router/uploadRouter.js'
+
 
 app.use('/api/v1/transaction', transactionRouter)
 app.use('/api/v1/auth', authRouter)
