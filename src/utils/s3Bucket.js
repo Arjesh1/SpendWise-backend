@@ -19,7 +19,7 @@ const uploadFile = async (image, folderName, key) => {
 
   const uploadParams = {
     Bucket: bucketName,
-    Key: `${key}`,
+    Key: `${folderName}/${key}`,
     Body: image.buffer,
     ContentType: image.mimetype,
   };

@@ -19,7 +19,7 @@ import User from '../models/authModel.js'
            return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Something went wrong. Please try again later.'})
         }
         const folderName = userId._id
-        const key = `${userId._id}.${image.originalname}`; 
+        const key = `${Date.now()}.${image.originalname}`; 
 
         const awsResponse = await uploadFile(image, folderName, key)
         

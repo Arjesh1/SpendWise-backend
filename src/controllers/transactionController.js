@@ -62,9 +62,9 @@ export const updateTransaction = async (req, res)=>{
        if(!transaction){
           return res.status(StatusCodes.NOT_FOUND).json({message: "Transaction cannot be updated!"})
        }  
-       await Transaction.findOneAndUpdate(
+       await Transaction.findOneAndReplace(
           {_id:_id},
-          rest,
+          {...rest, uid:userId._id},
           { new: true })
           return res.status(StatusCodes.OK).json({success: 'Successfully updated'}
         )
