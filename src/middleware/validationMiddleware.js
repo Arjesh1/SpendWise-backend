@@ -63,4 +63,8 @@ export const validateChangePasswordValues = withValidationError([
     body('newPassword').notEmpty().isEmail().withMessage('New password is required!'),
 ])
 
+export const validateResetPassword = withValidationError([
+    body('email').notEmpty().isEmail().withMessage('Email is invalid!'),
+])
+
 

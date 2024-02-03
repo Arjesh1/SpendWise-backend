@@ -3,6 +3,8 @@ import User from "../models/authModel.js"
 import { comparePassword, hashPassword } from "../utils/bcrypt.js"
 import { createJWT, verifyJWT } from "../utils/tokenUtils.js"
 import { RESPONSE_MESSAGES } from "../utils/constants.js"
+import ResetPw from "../models/resetPwModel.js"
+import { emailOtp } from "../utils/nodemailer.js"
 
 export const registerUser = async(req, res)=>{
     try {
@@ -127,8 +129,31 @@ export const changePassword = async (req, res) =>{
           console.error(error);
           return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
       }
-
-      
-
 }
 
+export const resetPassword = async (req, res) =>{
+    try {
+        const findUser =  await User.findOne(res.body)
+        if(!findUser){
+            return res.status(StatusCodes.NOT_FOUND).json({message: 'No user with this email found!'})
+        }
+        const {name, ...rest} = findUser
+        function generateCode() {
+            var minm = 100000;
+            var maxm = 999999;
+            return Math.floor(Math
+            .random() * (maxm - minm + 1)) + minm;
+        }
+        const code = generateCode()
+        // const resetStorage = await ResetPw.create({...req.body, code}) 
+
+        const emailSender  = await emailOtp(code, req.body.email, name)
+        console.log(emailSender)
+        res.status(StatusCodes.OK).json({success:'We have send you OTP in you email.'})
+    
+        
+      } catch (error) {
+          console.error(error);
+          return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
+      }
+}
