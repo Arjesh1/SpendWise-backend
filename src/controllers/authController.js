@@ -145,13 +145,13 @@ export const resetPassword = async (req, res) =>{
             .random() * (maxm - minm + 1)) + minm;
         }
         const code = generateCode()
-        // const resetStorage = await ResetPw.create({...req.body, code}) 
+        const resetStorage = await ResetPw.create({...req.body, code}) 
+        const emailSender  = await emailOtp(resetStorage.code, resetStorage.email, name)
+        if(!emailSender){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage }) 
+        } 
+        return res.status(StatusCodes.OK).json({success:'We have send you OTP in you email.'})
 
-        const emailSender  = await emailOtp(code, req.body.email, name)
-        console.log(emailSender)
-        res.status(StatusCodes.OK).json({success:'We have send you OTP in you email.'})
-    
-        
       } catch (error) {
           console.error(error);
           return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
