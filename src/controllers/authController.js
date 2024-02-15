@@ -131,9 +131,9 @@ export const changePassword = async (req, res) =>{
       }
 }
 
-export const resetPassword = async (req, res) =>{
+export const sentOTP = async (req, res) =>{
     try {
-        const findUser =  await User.findOne(res.body)
+        const findUser =  await User.findOne(req.body)
         if(!findUser){
             return res.status(StatusCodes.NOT_FOUND).json({message: 'No user with this email found!'})
         }
@@ -156,4 +156,14 @@ export const resetPassword = async (req, res) =>{
           console.error(error);
           return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
       }
+}
+
+export const verfiyCode = async (req, res)=>{
+    try {
+        
+        
+    } catch (error) {
+        console.error(error);
+        
+    }
 }

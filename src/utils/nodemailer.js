@@ -38,7 +38,7 @@ export const emailOtp = (code, email, name ) => {
       <h4>${code}</h4>
       <br/>
       <p>Enter this code to reset your password.</p>
-      <p>This code will be valid for 60 minutes only.</p>
+      <p>This code will be valid for 10 minutes only.</p>
       <br/>
       <p>Regards,<br/>Spend Wise team</p>
   `,

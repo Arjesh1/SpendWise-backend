@@ -5,7 +5,7 @@ const ResetSchema = new mongoose.Schema({
     code: Number,
     expiresIn: {
         type: Number,
-        default: Date.now() + 60 * 60 * 1000
+        default: Date.now() + 10 * 60 * 1000
     }
 })
 
