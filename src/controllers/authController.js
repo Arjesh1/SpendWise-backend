@@ -146,10 +146,10 @@ export const sentOTP = async (req, res) =>{
         }
         const code = generateCode()
         const resetStorage = await ResetPw.create({...req.body, code}) 
-        const emailSender  = await emailOtp(resetStorage.code, resetStorage.email, name)
-        if(!emailSender){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage }) 
-        } 
+        // const emailSender  = await emailOtp(resetStorage.code, resetStorage.email, name)
+        // if(!emailSender){
+        //     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage }) 
+        // } 
         return res.status(StatusCodes.OK).json({success:'We have send you OTP in you email.'})
 
       } catch (error) {
@@ -160,10 +160,26 @@ export const sentOTP = async (req, res) =>{
 
 export const verfiyCode = async (req, res)=>{
     try {
-        
-        
+        const {email,code} = req.body
+        const requestTimeStamp = Date.now()
+        const resetAccount = await ResetPw.findOne({email})
+        if(!resetAccount){
+            return res.status(StatusCodes.NOT_FOUND).json({ message: RESPONSE_MESSAGES.ErrorMessage })
+        }
+
+        if(resetAccount.code !== code){
+            return res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'Invalid OTP' })
+        }
+
+        if(resetAccount.expiresIn < requestTimeStamp){
+            return res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'OTP has expired!' })
+        }
+
+        return res.status(StatusCodes.OK).json({success:'OTP has been verified'})
+
     } catch (error) {
         console.error(error);
+          return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
         
     }
 }
