@@ -137,6 +137,7 @@ export const sendOTP = async (req, res) =>{
         if(!findUser){
             return res.status(StatusCodes.NOT_FOUND).json({message: 'No user with this email found!'})
         }
+        await ResetPw.findOneAndDelete(req.body)
         const {name, ...rest} = findUser
         function generateCode() {
             var minm = 100000;
