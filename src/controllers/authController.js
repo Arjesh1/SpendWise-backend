@@ -131,7 +131,7 @@ export const changePassword = async (req, res) =>{
       }
 }
 
-export const sentOTP = async (req, res) =>{
+export const sendOTP = async (req, res) =>{
     try {
         const findUser =  await User.findOne(req.body)
         if(!findUser){
@@ -141,8 +141,8 @@ export const sentOTP = async (req, res) =>{
         function generateCode() {
             var minm = 100000;
             var maxm = 999999;
-            return Math.floor(Math
-            .random() * (maxm - minm + 1)) + minm;
+            return (Math.floor(Math
+            .random() * (maxm - minm + 1)) + minm).toString();
         }
         const code = generateCode()
         const resetStorage = await ResetPw.create({...req.body, code}) 
@@ -180,6 +180,51 @@ export const verfiyCode = async (req, res)=>{
     } catch (error) {
         console.error(error);
           return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
+        
+    }
+}
+
+export const resetPassword = async (req, res)=>{
+    try {
+        const {email, code, password, confirmPassword} = req.body
+        if(!email || !code){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
+        }
+
+        if(password !== confirmPassword){
+            return res.status(StatusCodes.NOT_ACCEPTABLE).json({message: 'Password and confirm password do not match'})
+        }
+
+        const findUser =  await User.findOne({email})
+        if(!findUser){
+            return res.status(StatusCodes.NOT_FOUND).json({message: 'No user with this email found!'})
+        }
+
+        const resetAccount = await ResetPw.findOne({email})
+        if(!resetAccount){
+            return res.status(StatusCodes.NOT_FOUND).json({ message: RESPONSE_MESSAGES.ErrorMessage })
+        }
+
+        const requestTimeStamp = Date.now()
+        if(resetAccount.code !== code){
+            return res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'Invalid OTP' })
+        }
+
+        if(resetAccount.expiresIn < requestTimeStamp){
+            return res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'OTP has expired!' })
+        }
+
+        const hashedNewPassword = hashPassword(password)
+            await User.findOneAndUpdate(
+                  {_id: findUser._id},
+                  {$set: { hashedPassword: hashedNewPassword } },
+                  { new: true }
+              )
+              return res.status(200).json({success: 'Password has been reset'})
+
+    } catch (error) {
+        console.error(error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
         
     }
 }
