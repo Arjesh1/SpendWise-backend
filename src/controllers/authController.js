@@ -226,6 +226,5 @@ export const resetPassword = async (req, res)=>{
     } catch (error) {
         console.error(error);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage });
-        
     }
 }
