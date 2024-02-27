@@ -148,10 +148,10 @@ export const sendOTP = async (req, res) =>{
         const expiresIn = Date.now() + 10 * 60 * 1000
         const code = generateCode()
         const resetStorage = await ResetPw.create({...req.body, code, expiresIn}) 
-        const emailSender  = await emailOtp(resetStorage.code, resetStorage.email, name)
-        if(!emailSender){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage }) 
-        } 
+        // const emailSender  = await emailOtp(resetStorage.code, resetStorage.email, name)
+        // if(!emailSender){
+        //     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.ErrorMessage }) 
+        // } 
         return res.status(StatusCodes.OK).json({success:'We have send you OTP in you email.'})
 
       } catch (error) {
