@@ -3,7 +3,7 @@
   Start by setting up a new Node.js project with npm init to create a package.json file.
   - ## Install Dependencies: 
   Install all the necessary dependencies using npm:bash
-  npm install aws-sdk bcrypt cors dotenv express express-async-errors express-mongo-sanitize express-validator http-status-codes jsonwebtoken mongoose morgan multer multer-s3 nodemailer nodemon
+  > npm install aws-sdk bcrypt cors dotenv express express-async-errors express-mongo-sanitize express-validator http-status-codes jsonwebtoken mongoose morgan multer multer-s3 nodemailer nodemon
 # 2. Environment Configuration:
   - ##  Environment Variables: 
      Use dotenv to manage configuration settings securely.
