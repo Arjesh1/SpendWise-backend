@@ -1,14 +1,14 @@
 # 1. Project Initialization and Setup:
-  ## _ Initialize the Project: 
+  - ##  Initialize the Project: 
   Start by setting up a new Node.js project with npm init to create a package.json file.
-  ## _ Install Dependencies: 
+  - ## Install Dependencies: 
   Install all the necessary dependencies using npm:bash
   npm install aws-sdk bcrypt cors dotenv express express-async-errors express-mongo-sanitize express-validator http-status-codes jsonwebtoken mongoose morgan multer multer-s3 nodemailer nodemon
 # 2. Environment Configuration:
-  ## _ Environment Variables: 
+  - ##  Environment Variables: 
      Use dotenv to manage configuration settings securely.
-     _ Create a .env file to store sensitive information like database URI, JWT secret, AWS credentials, and email service credentials.
-  ## _ Configuration File: 
+     - Create a .env file to store sensitive information like database URI, JWT secret, AWS credentials, and email service credentials.
+  - ## Configuration File: 
      Create a configuration file (config.js) to load and manage environment variables.
 
 3. Database Setup:
